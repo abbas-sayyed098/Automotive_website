@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AutoVR</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<style>
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #0e0e2c, #1a1a40);
+  color: white;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 2rem;
+  background: rgb(27, 27, 27);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+.hamburger {
+      position: relative;
+      top: 10px;
+      left: 10px;
+      font-size: 30px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+.logo {
+  color: #a366ff;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.btn-demo {
+  background-color: #7a5af8;
+  color: white;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 5rem 2rem;
+  text-align: center;
+  background: url('background.png') no-repeat center;
+  background-size: cover;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 35, 0.8);
+}
+
+.hero-content {
+  position: relative;
+  max-width: 800px;
+  padding-top: 2rem;
+  z-index: 1;
+}
+
+.tagline {
+  color: #a366ff;
+  font-weight: 600;
+  background: #322b65;
+  display: inline-block;
+  padding: 0.3rem 1rem;
+  border-radius: 999px;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+}
+
+h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.highlight {
+  color: #7a5af8;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.description {
+  font-size: 1.1rem;
+  margin: 1.5rem 0;
+  color: #ccc;
+}
+
+.hero-buttons {
+  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background-color: #7a5af8;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #111;
+  color: white;
+  border: 1px solid #444;
+}
+
+.scroll-indicator {
+  margin-top: 2rem;
+  font-size: 0.95rem;
+  color: #aaa;
+}
+
+.arrow {
+  display: block;
+  font-size: 1.5rem;
+  margin-top: 0.3rem;
+}
+.bg-dark {
+  background-color: #0b0b0f !important;
+}
+
+.text-primary {
+  color: #815cff !important;
+}
+
+.badge.bg-primary {
+  background-color: #815cff;
+}
+
+.rounded-4 {
+  border-radius: 1rem;
+}
+/* Section background */
+section.bg-dark {
+  background-color: #0d0c11; /* deep dark for contrast */
+}
+
+/* Card-style containers */
+
+.bg-secondary.bg-opacity-10 {
+  background-color: rgba(20, 20, 40, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bg-secondary.bg-opacity-10:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* Headings */
+.bg-secondary.bg-opacity-10 h4 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Paragraph text */
+.bg-secondary.bg-opacity-10 p {
+  color: #b0b0b0;
+  font-size: 1rem;
+}
+
+/* CTA Links */
+.bg-secondary.bg-opacity-10 a {
+  color: #8b5cf6;
+  transition: color 0.3s ease;
+}
+
+.bg-secondary.bg-opacity-10 a:hover {
+  color: #a78bfa;
+  text-decoration: underline;
+}
+
+/* AOS animation override for smoother reveal */
+[data-aos] {
+  transition-property: opacity, transform;
+  transition-duration: 1s;
+}
+@media (max-width: 768px) {
+  .bg-secondary.bg-opacity-10 {
+    padding: 2rem 1.5rem;
+  }
+
+  .bg-secondary.bg-opacity-10 h4 {
+    font-size: 1.4rem;
+  }
+}
+/*demo */
+.vr-section {
+  background: #2e2554; /* Deep purple */
+  color: #e0e0e0;
+}
+.feature-card {
+  background-color: rgba(0, 0, 0, 0.432); /* Semi-transparent box */
+  padding: 2rem;
+  border-radius: 1rem;
+  color: #e0e0e0;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.icon-circle {
+  font-size: 2rem;
+  background-color: rgba(124, 58, 237, 0.2);
+  color: #7c3aed;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+}
+
+
+.badge-tag {
+  display: inline-block;
+  background-color: rgba(124, 58, 237, 0.2); /* Soft purple background */
+  color: #7c3aed;
+  font-size: 0.75rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.vr-heading {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.vr-heading .highlight {
+  color: #7c3aed; 
+}
+
+.vr-subtext {
+  font-size: 1.1rem;
+  color: #cbd5e1; 
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.vr-media img {
+  max-width: 70%;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+@media (max-width: 768px) {
+  .vr-media img {
+    width: 90%;
+  }
+}
+.vr-demo-section {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.center-btn {
+  margin: 4rem 0;
+}
+
+.demo-btn {
+  background-color: #7b61ff;
+  color: white;
+  font-size: 1.1rem;
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.demo-btn:hover {
+  background-color: #6a52e2;
+}
+/* feature section*/
+.feature-container {
+      background-color:  rgba(0, 0, 0, 0.432);;
+      color: rgb(255, 248, 248);
+      font-family: 'Segoe UI', sans-serif;
+      padding-top: 5rem;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .feature-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+    .feature-highlight {
+      color: #684aff;
+    }
+
+    .feature-description {
+      color: #ffffff;
+      max-width: 800px;
+      margin: auto;
+    }
+    .card {
+      background-color: rgba(0, 0, 0, 0.758);
+      border: none;
+      border-radius: 1rem;
+      padding: 2rem;
+      color: rgb(255, 249, 249);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(169, 168, 174, 0.3);
+}
+    .card-icon {
+      font-size: 2rem;
+      color: #ffffff;
+      margin-bottom: 1rem;
+    }
+    .card-title {
+      font-weight: bold;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .card-text {
+      color: #ffffff;
+    }
+    .virtual-experience-section {
+  padding: 4rem 1rem;
+  display: flex;
+  justify-content: center;
+  padding-top: 0;
+  margin-top: 0;
+
+}
+
+.experience-container {
+  border-radius: 16px;
+  background-color: rgba(0, 0, 0, 0.758);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  display: flex;
+  max-width: 1200px;
+  overflow: hidden;
+  flex-wrap: wrap;
+}
+
+.experience-text {
+  flex: 1;
+  padding: 3rem 2rem;
+  color: #fff;
+}
+
+.experience-heading {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.experience-description {
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin-bottom: 2rem;
+}
+
+.experience-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.experience-features li {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  color: #f2f2f2;
+}
+
+.experience-features i {
+  color: #8f88ff;
+  font-size: 1.2rem;
+  margin-right: 0.6rem;
+}
+
+.experience-image {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1a1c2d;
+}
+
+.experience-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/*testimonail*/
+.testimonials-section {
+  background:url('test-bg.jpg') center center / cover no-repeat;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+  padding: 80px 0;
+  overflow: hidden;
+}
+.testimonials-section .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(20, 20, 40, 0.75); /* deep bluish overlay */
+  backdrop-filter: blur(8px); /* adds glassy blur */
+  z-index: 1;
+.bg-purple {
+  background-color: #77777a;
+  font-size: 1rem; ;
+}
+
+}
+.text-purple {
+  color:#8f88ff ;
+}
+.text-light-gray {
+  color: #bcbacd;
+}
+.testimonials-section {
+  background-color: #43444d;
+}
+
+/* Card Styling */
+.testimonial-card {
+  background-color:rgba(44, 44, 48, 0.85);
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+/* Ensure inner content is above overlay */
+.testimonials-section .content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  text-align: center;
+}
+/* Partners & Clients Section */
+.partners-section {
+      margin-top: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    .partners-card {
+      background: rgba(61, 61, 67, 0.85);
+      backdrop-filter: blur(12px);
+      border-radius: 12px;
+      padding: 40px 60px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .partners-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 24px;
+      color: white;
+      font-weight: 600;
+    }
+
+    .partner-logos {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .partner-logos span {
+      font-size: 1.1rem;
+      color: #bbb;
+      font-weight: 500;
+    } 
+/*FAQ section*/
+
+.faq-section {
+  background-color: #1d1b2e;
+  padding: 80px 20px;
+  text-align: center;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 60px 20px;
+}
+
+.faq-badge {
+  display: inline-block;
+  background-color:  #5832ff;;
+  color: #ffffff;
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+.faq-heading {
+  font-size: 42px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.faq-heading .highlight {
+  color: #6846ff;
+}
+
+.faq-description {
+  font-size: 18px;
+  color: #ffffff;
+  margin-top: 20px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+.accordion-button {
+      background-color: #484855;
+      color: #fff;
+      font-weight: bold;
+    }
+.accordion-button:not(.collapsed) {
+      background-color: #2a2a38;
+      color: #fff;
+      box-shadow: none;
+    }
+.accordion-item {
+      background-color: #d6d6ff;
+      border: none;
+      margin-bottom: 1rem;
+      border-radius: 0.5rem;
+    }
+.accordion-body {
+      background-color: #2b2b3d;
+      color: #ccc;
+    }
+.faq-box {
+  max-width: 800px; /* adjust width here */
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 40px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  color: #fff;
+}
+.hero-section {
+      background: url('f-bg.jpg') no-repeat center center/cover;
+       overflow: hidden;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      
+    }
+
+    .hero-overlay {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 60px 40px;
+      border-radius: 10px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 700;
+    }
+    .hero-subtitle {
+      font-size: 1.25rem;
+      margin-top: 20px;
+      margin-bottom: 30px;
+      color: #d1d5db;
+    }
+    .button {
+  padding: 12px 24px;
+  font-size: 16px;
+  line-height: 1.5;
+  white-space: nowrap;
+  display: inline-block;
+  text-align: center;
+}
+
+    .btn-demo, .btn-start {
+      transition: transform 0.2s ease-in-out;
+      
+    }
+
+    .btn-demo:hover, .btn-start:hover {
+      transform: scale(1.05);
+    }
+
+    .small-note {
+      color: #ccc;
+      margin-top: 20px;
+      font-size: 0.9rem;
+    }
+    /*footer*/
+    .footer {
+      background-color: #0d0d14;
+      padding: 60px 20px 20px;
+    }
+
+    .footer h5 {
+      color: white;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .footer .brand {
+      color: #9b5de5;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .footer p {
+      color: #aaa;
+    }
+
+    .footer a {
+      color: #aaa;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer .social-icons a {
+      display: inline-block;
+      margin-right: 15px;
+      color: white;
+      background-color: #1a1a28;
+      border-radius: 50%;
+      padding: 10px;
+      font-size: 1.2rem;
+    }
+
+    .footer .social-icons a:hover {
+      color: #9b5de5;
+    }
+
+    .footer .bottom-bar {
+      border-top: 1px solid #222;
+      margin-top: 40px;
+      padding-top: 20px;
+      text-align: center;
+      color: #777;
+      font-size: 0.9rem;
+    }
+
+    .footer .policy-links a {
+      margin-left: 15px;
+      color: #999;
+    }
+
+    .footer .policy-links a:hover {
+      color: #ddd;
+    }
+    /* Responsive Adjustments */
+    @media (max-width: 992px) {
+        .navbar {
+            padding: 1rem;
+        }
+        
+        .hero h1 {
+            font-size: 2.2rem;
+            line-height: 1.2;
+        }
+
+        .vr-heading {
+            font-size: 2rem;
+        }
+
+        .experience-container {
+            flex-direction: column;
+        }
+
+        .experience-text {
+            padding: 2rem;
+        }
+
+        .experience-image {
+            min-height: 400px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero {
+            padding: 4rem 1rem;
+        }
+
+        .hero h1 {
+            font-size: 1.8rem;
+        }
+
+        .description {
+            font-size: 1rem;
+        }
+
+        .feature-title {
+            font-size: 2rem;
+        }
+
+        .testimonial-card {
+            padding: 1.5rem;
+        }
+
+        .partners-card {
+            padding: 2rem;
+        }
+
+        .faq-heading {
+            font-size: 2rem;
+        }
+
+        .hero-title {
+            font-size: 2rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .btn-primary,
+        .btn-secondary {
+            width: 100%;
+        }
+
+        .hero-buttons {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .feature-card {
+            padding: 1.5rem;
+        }
+
+        .partner-logos {
+            gap: 15px;
+        }
+
+        .faq-box {
+            padding: 1.5rem;
+        }
+
+        .footer .row > div {
+            margin-bottom: 2rem;
+        }
+
+        .experience-features li {
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Ensure all images are responsive */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Force Bootstrap columns to stack on mobile */
+    @media (max-width: 768px) {
+        .row {
+            flex-direction: column;
+            margin-left: 0;
+            margin-right: 0;
+        }
+        
+        .row > * {
+            max-width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+</style>
+<body>
+  <header class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top px-3">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+    
+     <!-- Hamburger Toggler -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+         </button>
+     
+         <div class="mx-auto d-lg-none align-items-center">
+          <div class="logo" href="#">AutoVR</div>
+         </div>
+         <div class="logo d-none d-lg-block">AutoVR</div>
+      <!-- Collapsible Navigation -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="#benefits">Benefits</a></li>
+          <li class="nav-item"><a class="nav-link" href="#demo">Demo</a></li>
+          <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="#testimonials">Testimonials</a></li>
+          <li class="nav-item"><a class="nav-link" href="#FAQ">FAQ</a></li>
+        </ul>
+        <!-- Request a Demo button -->
+        <a href="#demo" class="btn btn-primary ms-lg-3">Request a Demo</a>
+      </div>
+    </div>
+  </header>
+  <section class="hero">
+    <div class="hero-content"data-aos="fade-up" data-aos-delay="200"data-aos-duration="800">
+        <p class="tagline"data-aos="fade-up" data-aos-delay="300">NEXT-GEN AUTOMOTIVE SALES PLATFORM</p>
+      <h1 data-aos="fade-up" data-aos-delay="400">
+        Transform Automotive Sales with<br />
+        Immersive <span class="highlight">VR & 3D Solutions</span>
+      </h1>
+      <p class="description"data-aos="fade-up" data-aos-delay="500">
+        Boost engagement, reduce showroom costs, and accelerate purchase decisions with
+        cutting-edge VR and interactive automotive experiences.
+      </p>
+      <div class="hero-buttons"data-aos="fade-up" data-aos-delay="600">
+        <a href="#demo" class="btn-primary">Request a Demo</a>
+        <a href="#learn-more" class="btn-secondary">Learn More</a>
+      </div>
+      <div class="scroll-indicator"data-aos="fade-up" data-aos-delay="700">
+        Scroll to explore<br><span class="arrow"></span>
+      </div>
+    </div>
+  </section>
+  <!--benefits--->
+  <section id="benefits" class=" pt-5 py-5 text-light bg-dark" style="background-image: url('auto.ben.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; position: relative;">
+    <div class="overlay"  style= " text-align:center;position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
+    <div class="container text-center">
+      <span class="badge btn-primary mb-3" data-aos=fade-up>WHY CHOOSE US</span>
+      <h2 class="fw-bold display-6" data-aos="fade-up">
+        Why Our VR Solutions are <span class="text-primary">Revolutionizing</span> Automotive Sales
+      </h2>
+      <p class="lead  mb-5" data-aos="fade-up" data-aos-delay="100">
+        Our immersive virtual reality solutions are transforming how customers experience vehicles, 
+        leading to remarkable improvements in engagement, efficiency, and sales conversion.
+      </p>
+  
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+          <div class="bg-secondary bg-opacity-10 p-4 rounded-4 h-100">
+            <div class="text-primary fs-2 mb-2">📈</div>
+            <h5 class="fw-bold">Increase in Customer Engagement</h5>
+            <p class="fs-3 text-primary fw-bold">200%</p>
+            <p class="white">Through interactive virtual experiences</p>
+          </div>
+        </div>
+  
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+          <div class="bg-secondary bg-opacity-10 p-4 rounded-4 h-100">
+            <div class="text-primary fs-2 mb-2">$</div>
+            <h5 class="fw-bold">Reduction in Showroom Costs</h5>
+            <p class="fs-3 text-primary fw-bold">15%</p>
+            <p class="white">By shifting to digital experiences</p>
+          </div>
+        </div>
+  
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
+          <div class="bg-secondary bg-opacity-10 p-4 rounded-4 h-100">
+            <div class="text-primary fs-2 mb-2">⏱</div>
+            <h5 class="fw-bold">Faster Decision-Making</h5>
+            <p class="fs-3 text-primary fw-bold">30%</p>
+            <p class="white">And 81% higher purchase intent</p>
+          </div>
+        </div>
+  
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="500">
+          <div class="bg-secondary bg-opacity-10 p-4 rounded-4 h-100">
+            <div class="text-primary fs-2 mb-2">🏅</div>
+            <h5 class="fw-bold">More Customer Inquiries</h5>
+            <p class="fs-3 text-primary fw-bold">50%</p>
+            <p class="white">When offering a VR-powered experience</p>
+          </div>
+        </div>
+      </div>
+    </div>
+   
+      <div class="row g-4 mt-2">
+        <div class="col-md-6" data-aos="fade-up">
+          <div class="bg-secondary bg-opacity-10 p-4 rounded-4 h-100">
+            <h4 class="fw-bold">Visualize Before They Buy</h4>
+            <p class="white">
+              Immersive, 360° VR tours allow customers to explore vehicles like never before. They can experience every detail,
+              from interior features to exterior finishes, all from the comfort of their home.
+            </p>
+            <p class="text-primary fw-medium mb-0">
+              <i class="bi bi-record-circle text-primary me-1"></i>
+              <a href="#" class="text-decoration-none text-primary">Increase customer confidence in purchasing decisions</a>
+            </p>
+          </div>
+        </div>
+  
+        <div class="col-md-6" data-aos="fade-up">
+          <div class="bg-secondary bg-opacity-10 p-4 rounded-4 h-100">
+            <h4 class="fw-bold">Lower Costs, Higher Efficiency</h4>
+            <p class="white">
+              Reduce showroom expenses and streamline sales by enabling customers to virtually explore your entire inventory
+              without requiring physical models of every trim and color option.
+            </p>
+            <p class="text-primary fw-medium mb-0">
+              <i class="bi bi-record-circle text-primary me-1"></i>
+              <a href="#" class="text-decoration-none text-primary">Optimize inventory management and showroom space</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--demo section-->
+    <section  id="demo" class="section active vr-section  pt-5 pb-5 text-center py-5 position-relative" 
+    style="background-image: url('auto-demo.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+      <div class="container"data-aos="fade-up" data-aos-delay="100">
+        <span class=" badge-tag mb-2">INTERACTIVE EXPERIENCE</span>
+        <h2 class="vr-heading mb-3">
+          See Our <span class="highlight">VR in Action</span>
+        </h2>
+        <p class="vr-subtext mb-5">
+          Experience how customers can explore color options, interiors, and configurations
+          without visiting a showroom, leading to faster purchase decisions.
+        </p>
+
+    <div class="vr-media mb-5">
+          <img src="background.png" alt="VR Demo" class="img-fluid rounded-4 border border-secondary-subtle" />
+        </div>
+
+ <div class="mb-4" class="col-md-4" data-aos="fade-up">
+    <button class="demo-btn">Try the Demo</button>
+    </div>
+
+      <div class="row g-4 justify-content-center">
+            <div class="col-md-4" data-aos="fade-up">
+              <div class="feature-card h-100">
+                <div class="icon-circle">📷</div>
+                <h5>Explore Every Angle</h5>
+                <p>See vehicles from any perspective with 360° views and zoom capabilities</p>
+              </div>
+            </div>
+      
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="150">
+              <div class="feature-card h-100">
+                <div class="icon-circle">🎛️</div>
+                <h5>Customize Features</h5>
+                <p>Instantly change colors, trims, and accessories to find the perfect configuration</p>
+              </div>
+            </div>
+      
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+              <div class="feature-card h-100">
+                <div class="icon-circle">🧭</div>
+                <h5>Interactive Test Drive</h5>
+                <p>Experience virtual test drives with realistic physics and road conditions</p>
+              </div>
+            </div>
+          </div>
+    </div>
+    
+</section>
+      <!--features section-->
+    <section class="feature-container text-center py-5"style="background-image: url('auto-fea.jpg'); background-size: cover; background-position: center; position: relative;">
+      <div class="overlay" style="position: absolute; inset: 0;  z-index: 1;"></div>
+       <div id="features" class="section active" >
+      <div class= " container text-center py-5 " data-aos=fade-up>
+            <span class="badge btn-primary text-uppercase mb-2">Powerful Features</span>
+            <h1 class="feature-title">Advanced Features Tailored for <span class="feature-highlight">Automotive Success</span></h1>
+            <p class="feature-description mt-3">Our comprehensive suite of VR and 3D solutions provides everything you need to create compelling digital experiences that drive sales and customer satisfaction.</p>
+          </div>
+          <div class="container py-4">
+            <div class="row g-4">
+              <div class="col-md-6"data-aos="fade-up" data-aos-delay="100">
+                <div class="card h-100 text-start">
+                  <div class="card-icon"><i class="bi bi-globe"></i></div>
+                  <div class="card-title">Virtual Showroom Technology</div>
+                  <p class="card-text">Bring the showroom to the customer with fully interactive 3D environments that showcase every detail of your vehicles.</p>
+                </div>
+              </div>
+              <div class="col-md-6"data-aos="fade-up" data-aos-delay="200">
+                <div class="card h-100 text-start">
+                  <div class="card-icon"><i class="bi bi-grid-3x3-gap"></i></div>
+                  <div class="card-title">Customizable Configurations</div>
+                  <p class="card-text">Let customers explore trims, colors, and features in real-time, creating their perfect vehicle with immediate visual feedback.</p>
+                </div>
+              </div>
+              <div class="col-md-6"data-aos="fade-up" data-aos-delay="300">
+                <div class="card h-100 text-start">
+                  <div class="card-icon"><i class="bi bi-plug"></i></div>
+                  <div class="card-title">Integration with CRM Systems</div>
+                  <p class="card-text">Track leads and interactions seamlessly with full integration to your existing CRM and sales platforms.</p>
+                </div>
+              </div>
+              <div class="col-md-6"data-aos="fade-up" data-aos-delay="400">
+                <div class="card h-100 text-start">
+                  <div class="card-icon"><i class="bi bi-cloud"></i></div>
+                  <div class="card-title">Cloud-Based for Scalability</div>
+                  <p class="card-text">Access anywhere with real-time updates and no hardware limitations, ensuring your experience scales with your business.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+       </div>
+       <div class="virtual-experience-section"data-aos="fade-up" data-aos-delay="500" >
+        <div class="experience-container">
+          <div class="experience-text">
+            <h2 class="experience-heading">The Complete Virtual Experience</h2>
+            <p class="experience-description">
+              Our platform goes beyond simple 3D models to create truly immersive experiences that engage customers and drive sales, all while reducing your operational costs.
+            </p>
+            <ul class="experience-features">
+              <li><i class="bi bi-check-circle-fill"></i> Full VR compatibility with major headsets</li>
+              <li><i class="bi bi-check-circle-fill"></i> Browser-based fallback for universal access</li>
+              <li><i class="bi bi-check-circle-fill"></i> Real-time analytics on customer interactions</li>
+              <li><i class="bi bi-check-circle-fill"></i> Secure cloud storage for all 3D assets</li>
+              <li><i class="bi bi-check-circle-fill"></i> Regular feature updates and improvements</li>
+            </ul>
+          </div>
+          <div class="experience-image" >
+            <img src="background.png" alt="3D Experience Image" />
+          </div>
+        </div>
+       </div>
+     
+      </section>
+      <!--testimonial-->
+      <section class="testimonials-section text-white py-5" id="testimonials">
+       <div class="section active" > 
+        <div class="overlay"></div>
+        <div class="content">
+        <div class="container">
+          <div class="text-center mb-5"data-aos="fade-up" data-aos-delay="100">
+            <span class="badge btn-primary mb-2">SUCCESS STORIES</span>
+            <h2 class="fw-bold">
+              Trusted by Top <span class="text-purple">Automotive Brands</span>
+            </h2>
+            <p class="text-light-gray">
+              Our immersive VR solutions have helped leading automotive companies transform their sales process,
+              reduce costs, and increase customer engagement.
+            </p>
+          </div>
+      
+          <div class="row g-4">
+            <!-- Testimonial Card 1 -->
+            <div class="col-md-4 "data-aos= fade-up data-aos-delay="200">
+              <div class="testimonial-card p-4 h-100">
+                <div class="d-flex justify-content-between mb-3">
+                  <div class="text-purple">★★★★★</div>
+                  <i class="bi bi-quote fs-4 text-purple"></i>
+                </div>
+                <p class="fst-italic">
+                  "Our VR solutions reduced showroom costs by 10–15% and increased engagement by 200%!"
+                </p>
+                <div class="mt-4">
+                  <h6 class="mb-0 fw-bold">Sarah Johnson</h6>
+                  <small class="text-light-gray">Head of Sales, Premium Motors</small>
+                </div>
+              </div>
+            </div>
+      
+            <!-- Testimonial Card 2 -->
+            <div class="col-md-4 "data-aos=fade-up data-aos-delay="300">
+              <div class="testimonial-card p-4 h-100">
+                <div class="d-flex justify-content-between mb-3">
+                  <div class="text-purple">★★★★★</div>
+                  <i class="bi bi-quote fs-4 text-purple"></i>
+                </div>
+                <p class="fst-italic">
+                  "Customer dwell time increased by 40% and conversion rates improved dramatically since implementing AutoVR."
+                </p>
+                <div class="mt-4">
+                  <h6 class="mb-0 fw-bold">Michael Chen</h6>
+                  <small class="text-light-gray">Marketing Director, Elite Automotive</small>
+                </div>
+              </div>
+            </div>
+          
+            <!-- Testimonial Card 3 -->
+            <div class="col-md-4 "data-aos= fade-up data-aos-delay="400">
+              <div class="testimonial-card p-4 h-100">
+                <div class="d-flex justify-content-between mb-3">
+                  <div class="text-purple">★★★★☆</div>
+                  <i class="bi bi-quote fs-4 text-purple"></i>
+                </div>
+                <p class="fst-italic">
+                  "The virtual showroom experience has revolutionized how we present vehicles to our clients. It's a game-changer."
+                </p>
+                <div class="mt-4">
+                  <h6 class="mb-0 fw-bold">James Wilson</h6>
+                  <small class="text-light-gray">CEO, Luxury Vehicles Inc</small>
+                </div>
+              </div>
+            </div>
+          </div>
+         <!-- Partners Section -->
+    <div class="partners-section"data-aos=fade-up data-aos-delay="500">
+        <div class="partners-card">
+          <h3>Partners & Clients</h3>
+          <div class="partner-logos">
+            <span>BMW</span>
+            <span>Mercedes-Benz</span>
+            <span>Toyota</span>
+            <span>Ford</span>
+            <span>Honda</span>
+            <span>Lexus</span>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+</section>
+<!-- FAQ Section -->
+<section class= "feature-container text-center py-5" style="background-image: url('auto-supp.jpg'); background-size: cover; background-position: center; position: relative;">
+  <div class="overlay" style="position: absolute; inset: 0;  z-index: 0;"></div>
+    <div id="FAQ" class="section active"data-aos="fade-up" data-aos-delay="100" >
+    <div class="faq-badge">Support</div>
+    <h2 class="faq-heading">
+      Got Questions? <span class="highlight">We've Got Answers</span>
+    </h2>
+    <p class="faq-description">
+      Find answers to common questions about our VR solutions for automotive sales.
+      If you don't see your question here, please contact us directly.
+    </p>
+
+    <div class="container py-5">
+        <div class="faq-box mx-auto">
+        <div class="accordion" id="faqAccordion">
+          <!-- 1 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                Can we customize the virtual showroom to match our branding?
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                Absolutely! Our platform is fully customizable to match your brand identity, including colors, logos, showroom environment, and more. We create a cohesive experience that represents your unique brand.
+              </div>
+            </div>
+          </div>
+      
+          <!-- 2 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                How are vehicle updates and new models handled?
+              </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                We provide regular updates as part of our service. New models can be added to your virtual inventory as they're released, ensuring your virtual showroom always represents your current lineup.
+              </div>
+            </div>
+          </div>
+      
+          <!-- 3 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                How do your VR solutions integrate with my current dealership setup?
+              </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                Our solutions are plug-and-play and integrate with most CRM and sales platforms. We provide full technical support during implementation to ensure seamless integration with your existing systems.
+              </div>
+            </div>
+          </div>
+      
+          <!-- 4 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingFour">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                Do I need VR headsets for customers?
+              </button>
+            </h2>
+            <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                We offer both VR headset and browser-based experiences for maximum accessibility. While VR headsets provide the most immersive experience, customers can still explore your vehicles in 3D using any modern web browser on their computer or mobile device.
+              </div>
+            </div>
+          </div>
+      
+          <!-- 5 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingFive">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive">
+                How long does implementation take?
+              </button>
+            </h2>
+            <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                Typical implementation takes 2–4 weeks depending on the size of your inventory and customization requirements. Our team works closely with you to ensure a smooth transition and proper staff training.
+              </div>
+            </div>
+          </div>
+ 
+        </div>
+        </div>
+       </div>
+      </div>
+    </section>
+  <section class="hero-section"data-aos="fade-up" data-aos-delay="100">
+    <div class="hero-overlay">
+      <h1 class="hero-title">
+        Ready to <span class="highlight">Revolutionize</span> Your Automotive Sales?
+      </h1>
+      <p class="hero-subtitle">
+        Transform your customer experience and boost sales with our cutting-edge VR and 3D solutions. 
+        Get started today and stay ahead of the competition.
+      </p>
+      <div class="d-flex justify-content-center gap-3">
+        <a href="#" class=" btn btn-primary btn-lg btn-demo">Request a Demo</a>
+        <a href="#" class="btn btn-secondary btn-start">Get Started Now</a>
+      </div>
+      <p class="small-note">No credit card required. Start with a free consultation.</p>
+    </div>
+  </section>
+  <!---footer section-->
+  <footer class="footer">
+    <div class="container text-md-start text-center">
+      <div class="row">
+        <div class="col-md-3 mb-4">
+          <div class="brand">AutoVR</div>
+          <p>Transforming automotive sales with immersive VR and 3D solutions that drive engagement and results.</p>
+          <div class="social-icons mt-3">
+            <a href="#"><i class="bi bi-twitter"></i></a>
+            <a href="#"><i class="bi bi-linkedin"></i></a>
+            <a href="#"><i class="bi bi-facebook"></i></a>
+            <a href="#"><i class="bi bi-instagram"></i></a>
+          </div>
+        </div>
+        <div class="col-md-2 mb-4">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Case Studies</a></li>
+            <li><a href="#">Pricing</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3 mb-4">
+          <h5>Solutions</h5>
+          <ul class="list-unstyled">
+            <li><a href="#">Virtual Showrooms</a></li>
+            <li><a href="#">3D Configurators</a></li>
+            <li><a href="#">AR Applications</a></li>
+            <li><a href="#">Interactive Kiosks</a></li>
+            <li><a href="#">Analytics Platform</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 mb-4">
+          <h5>Contact Us</h5>
+          <ul class="list-unstyled">
+            <li><i class="bi bi-geo-alt-fill me-2"></i>123 Innovation Drive, Tech City, CA 94043</li>
+            <li><i class="bi bi-envelope-fill me-2"></i>info@autovr.com</li>
+            <li><i class="bi bi-telephone-fill me-2"></i>+1 (888) 123-4567</li>
+          </ul>
+        </div>
+      </div>
+      <div class="bottom-bar">
+        <p>&copy; 2025 AutoVR. All rights reserved.</p>
+        <div class="policy-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    const sections = document.querySelectorAll("section");
+  
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        entry.target.classList.toggle("in-view", entry.isIntersecting);
+      });
+    }, { threshold: 0.4 });
+  
+    sections.forEach(section => observer.observe(section));
+  </script>
+  
+  <script>
+    AOS.init({
+      once: true,           // animation happens only once
+      duration: 800,        // default animation duration
+      easing: 'ease-in-out' // smooth easing
+    });
+  </script>
+  
+</body>
+</html>  
